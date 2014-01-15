@@ -1,16 +1,16 @@
 function wp_action(data, svg_area) {
     total_edits += 1;
-    if (total_edits == 1) {
-        $('#edit_counter').html('You have seen <span>' + total_edits + ' possible planets detected</span>.');
-    } else {
-        $('#edit_counter').html('You have seen a total of <span>' + insert_comma(total_edits) + ' total planets</span>.');
-    }
+    // if (total_edits == 1) {
+    //     $('#edit_counter').html('You have seen <span>' + total_edits + ' possible planets detected</span>.');
+    // } else {
+    //     $('#edit_counter').html('You have seen a total of <span>' + insert_comma(total_edits) + ' total planets</span>.');
+    // }
     var now = new Date();
     edit_times.push(now);
     to_save = [];
     
 
-    var size = data["Planet Radius"]*10;
+    var size = data["Planet Radius"]*50;
     var label_text = data["KOI Name"];
     var csize = size;
     var no_label = false;
@@ -23,11 +23,12 @@ function wp_action(data, svg_area) {
         type = 'bot';
     }
 
+
     var circle_id = 'd' + ((Math.random() * 100000) | 0);
     var abs_size = Math.abs(size);
     size = Math.max(Math.sqrt(abs_size) * scale_factor, 3);
 
-    Math.seedrandom(data.page_title)
+   // Math.seedrandom(data.page_title)
     var x = Math.random() * (width - size) + size;
     var y = Math.random() * (height - size) + size;
     if (csize > 0) {
@@ -35,6 +36,17 @@ function wp_action(data, svg_area) {
     } else {
         play_sound(size, 'sub', 1);
     }
+
+    console.log("X: " + x + " Y " + y + " size " + size);
+//    console.log("Y: " + y);
+//    console.log("width" + width);
+ //   console.log("Size " + size);
+//    console.log("height "  + height);
+
+    var circle_id = 'd' + ((Math.random() * 100000) | 0);
+
+
+
 
     var circle_group = svg_area.append('g')
         .attr('transform', 'translate(' + x + ', ' + y + ')')
@@ -134,7 +146,7 @@ function newuser_action(data, lid, svg_area) {
                    // 'Welcome, ' + data.planet + ' has joined Wikipedia!'];
     var message = Math.round(Math.random() * (messages.length - 1));
     var user_link = 'http://' + lid + '.wikipedia.org/w/index.php?title=User_talk:' + data["KOI name"] + '&action=edit&section=new';
-    var user_group = svg_area.append('g');
+   var user_group = svg_area.append('g');
 
     var user_container = user_group.append('a')
         .attr('xlink:href', user_link)
@@ -182,48 +194,3 @@ var make_click_handler = function($box, setting) {
             }
         };
 };
-
-var epm_text = false;
-var epm_container = {};
-
-function update_epm(epm, svg_area) {
-    if (!epm_text) {
-        epm_container = svg_area.append('g')
-            .attr('transform', 'translate(0, ' + (height - 25) + ')');
-
-        var epm_box = epm_container.append('rect')
-            .attr('fill', newuser_box_color)
-            .attr('opacity', 0.5)
-            .attr('width', 135)
-            .attr('height', 25);
-
-        epm_text = epm_container.append('text')
-            .classed('newuser-label', true)
-            .attr('transform', 'translate(5, 18)')
-            .style('font-size', '.8em')
-            .text(epm + ' edits per minute');
-
-    } else if (epm_text.text) {
-        epm_text.text(epm + ' edits per minute');
-    }
-}
-
-var insert_comma = function(s) {
-    s = s.toFixed(0);
-    if (s.length > 2) {
-        var l = s.length;
-        var res = "" + s[0];
-        for (var i=1; i<l-1; i++) {
-            if ((l - i) % 3 == 0)
-                res += ",";
-            res +=s[i];
-        }
-        res +=s[l-1];
-
-        res = res.replace(',.','.');
-
-        return res;
-    } else {
-        return s;
-    }
-}
