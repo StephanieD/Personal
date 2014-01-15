@@ -10,13 +10,12 @@ function wp_action(data, svg_area) {
     to_save = [];
     
 
-    var size = data.planetsize;
+    var size = data.planetsize*10;
     var label_text = data.planet;
     var csize = size;
     var no_label = false;
     var type;
     if (data.value == 'NOT DISPOSITIONED') {
-       // alert('confirmed')
         type = 'anon';
     } else if (data.value ==  'CANDIDATE') {
         type = 'user';
@@ -102,14 +101,14 @@ function wp_action(data, svg_area) {
 
 
 
-var log_rc = function(rc_str, limit) {
-    $('#rc-log').prepend('<li>' + rc_str + '</li>');
-    if (limit) {
-        if ($('#rc-log li').length > limit) {
-            $('#rc-log li').slice(limit, limit + 1).remove();
-        }
-    }
-};
+// var log_rc = function(rc_str, limit) {
+//     $('#rc-log').prepend('<li>' + rc_str + '</li>');
+//     if (limit) {
+//         if ($('#rc-log li').length > limit) {
+//             $('#rc-log li').slice(limit, limit + 1).remove();
+//         }
+//     }
+// };
 /*
 var rate_bg = svg.append('rect')
     .attr('opacity', 0.0)
