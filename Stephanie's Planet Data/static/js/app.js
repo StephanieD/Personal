@@ -10,14 +10,14 @@ function wp_action(data, svg_area) {
     to_save = [];
     
 
-    var size = data.planetsize*10;
-    var label_text = data.planet;
+    var size = data["Planet Radius"]*10;
+    var label_text = data["KOI Name"];
     var csize = size;
     var no_label = false;
     var type;
-    if (data.value == 'NOT DISPOSITIONED') {
+    if (data["Kepler Disposition"]== 'NOT DISPOSITIONED') {
         type = 'anon';
-    } else if (data.value ==  'CANDIDATE') {
+    } else if (data["Kepler Disposition"] ==  'CANDIDATE') {
         type = 'user';
     } else {
         type = 'bot';
@@ -51,7 +51,7 @@ function wp_action(data, svg_area) {
          .remove();
 
     var circle_container = circle_group.append('a')
-        .attr('xlink:href', data.planet)
+        .attr('xlink:href', data["KOI Name"])
         .attr('target', '_blank')
         .attr('fill', svg_text_color);
 
@@ -100,22 +100,6 @@ function wp_action(data, svg_area) {
 }
 
 
-
-// var log_rc = function(rc_str, limit) {
-//     $('#rc-log').prepend('<li>' + rc_str + '</li>');
-//     if (limit) {
-//         if ($('#rc-log li').length > limit) {
-//             $('#rc-log li').slice(limit, limit + 1).remove();
-//         }
-//     }
-// };
-/*
-var rate_bg = svg.append('rect')
-    .attr('opacity', 0.0)
-    .attr('fill', 'rgb(41, 128, 185)')
-    .attr('width', width)
-    .attr('height', height)
-*/
 function play_sound(size, type, volume) {
     var max_pitch = 100.0;
     var log_used = 1.0715307808111486871978099;
@@ -145,11 +129,11 @@ function play_random_swell() {
 
 function newuser_action(data, lid, svg_area) {
     play_random_swell();
-    var messages = ['Welcome ' + data.planet + ', the known planets in the universe'];
+    var messages = ['Welcome ' + data["KOI Name"] + ', the known planets in the universe'];
                     //'Wikipedia has a new user, ' + data.planet + '! Welcome!',
                    // 'Welcome, ' + data.planet + ' has joined Wikipedia!'];
     var message = Math.round(Math.random() * (messages.length - 1));
-    var user_link = 'http://' + lid + '.wikipedia.org/w/index.php?title=User_talk:' + data.planet + '&action=edit&section=new';
+    var user_link = 'http://' + lid + '.wikipedia.org/w/index.php?title=User_talk:' + data["KOI name"] + '&action=edit&section=new';
     var user_group = svg_area.append('g');
 
     var user_container = user_group.append('a')
@@ -187,29 +171,6 @@ function newuser_action(data, lid, svg_area) {
         .attr('text-anchor', 'middle');
 
 }
-
-var return_hash_settings = function() {
-    var hash_settings = window.location.hash.slice(1).split(',');
-    for (var i = 0; i < hash_settings.length + 1; i ++) {
-        if (hash_settings[i] === '') {
-            hash_settings.splice(i, 1);
-        }
-    }
-    return hash_settings;
-};
-
-var return_lang_settings = function() {
-    var enabled_hash = return_hash_settings();
-    enabled_langs = [];
-    for (var i = 0; i < enabled_hash.length +1; i ++) {
-        var setting = enabled_hash[i];
-        if (langs[setting]) {
-            enabled_langs.push(setting);
-        }
-    }
-    return enabled_langs;
-};
-
 
 
 var make_click_handler = function($box, setting) {
