@@ -8,24 +8,7 @@ function wp_action(data, svg_area) {
     var now = new Date();
     edit_times.push(now);
     to_save = [];
-    if (edit_times.length > 1) {
-        for (var i = 0; i < edit_times.length + 1; i ++) {
-            var i_time = edit_times[i];
-            if (i_time) {
-                var i_time_diff = now.getTime() - i_time.getTime();
-                if (i_time_diff < 60000) {
-                    to_save.push(edit_times[i]);
-                }
-            }
-        }
-        edit_times = to_save;
-       // var opacity = 1 / (100 / to_save.length);
-     //   if (opacity > 0.5) {
-     //       opacity = 0.5;
-      //  }
-        /*rate_bg.attr('opacity', opacity)*/
-        update_epm(to_save.length, svg_area);
-    }
+    
 
     var size = data.planetsize;
     var label_text = data.planet;
@@ -118,116 +101,6 @@ function wp_action(data, svg_area) {
 }
 
 
-function wikipediaSocket() {
-
-}
-/*
-wikipediaSocket.init = function(ws_url, lid, svg_area) {
-    console.log("test")
-    this.connect = function() {
-        $('#' + lid + '-status').html('(connecting...)');
-        var loading = true;
-        // Terminate previous connection, if any
-        if (this.connection)
-          this.connection.close();
-
-        if ('WebSocket' in window) {
-            var connection = new ReconnectingWebSocket(ws_url);
-            this.connection = connection;
-
-            connection.onopen = function() {
-                console.log('Connection open to ' + lid);
-                $('#' + lid + '-status').html('(connected)');
-            };
-
-            connection.onclose = function() {
-                console.log('Connection closed to ' + lid);
-                $('#' + lid + '-status').html('(closed)');
-            };
-
-            connection.onerror = function(error) {
-                $('#' + lid + '-status').html('Error');
-                console.log('Connection Error to ' + lid + ': ' + error);
-            };
-
-            connection.onmessage = function(resp) {
-               // var data = JSON.parse(resp.data);
-               var data = JSON.parse({planet:'Stephanie',value:'confirmed',planetsize:10})
-                if (!all_loaded) {
-                    return;
-                }
-
-                if (data.ns == 'Main') {
-                    if (!isNaN(data.change_size)) {
-                     /*   if (data.confirmed &&
-                            (data.confirmed.toLowerCase().indexOf('confirmed') > -1 ||
-                            data.confirmed.toLowerCase().indexOf('confimed') > -1 ||
-                            data.confirmed.toLowerCase().indexOf('confirmed') > -1)) {
-                            data.revert = true;
-                        } else {
-                            data.revert = false;
-                        }*/
-                       /* var rc_str = '<a href="http://' + lid + '.wikipedia.org/wiki/User:' + data.user + '" target="_blank">' + data.user + '</a>';
-                        if (data.planetsize < 0) {
-                            if (data.planetsize== -1) {
-                                rc_str += ' removed ' + Math.abs(data.change_size) + ' byte from';
-                            } else {
-                                rc_str += ' removed ' + Math.abs(data.change_size) + ' bytes from';
-                            }
-                        } else if (data.planetsize === 0) {
-                            rc_str += ' edited';
-                        } else {
-                            if (data.planetsize == 1) {
-                                rc_str += ' added ' + Math.abs(data.change_size) + ' byte to';
-                            } else {
-                                rc_str += ' added ' + Math.abs(data.change_size) + ' bytes to';
-                            }
-                        }
-
-                       rc_str += ' <a href="' + data.url + '" target="_blank">' + data.page_title + '</a> ';
-                        if (data.is_anon) {
-                            rc_str += ' <span class="log-anon">(unregistered user)</span>';
-                        }
-                        if (data.is_bot) {
-                            rc_str += ' <span class="log-bot">(bot)</span>';
-                        }
-                        if (data.revert) {
-                            rc_str += ' <span class="log-undo">(undo)</span>';
-                        }
-                        rc_str += ' <span class="lang">(' + lid + ')</span>';
-                        log_rc(rc_str, 20);
-                */
-                /*
-                        wp_action(data, svg_area);
-                    } else {
-                        console.log('ValueError:' + change_size + 'is not a number');
-                    }
-                } else if (data.page_title == 'Special:Log/newusers' &&
-                           data.url != 'byemail' &&
-                           s_welcome) {
-                    if (user_announcements) {
-                        newuser_action(data, lid, svg_area);
-                    }
-                    var nu_str = '<a href="http://' + lid + '.wikipedia.org/w/index.php?title=User_talk:' + data.user + '&action=edit&section=new">' + data.user + '</a>';
-                    nu_str += ' joined ' + lid + ' Wikipedia! Welcome!';
-                    log_rc(nu_str, 20);
-                }
-            };
-        }
-    };
-  //  this.close = function() {
-    //    if (this.connection) {
-      //      this.connection.close();
-        //}
-    //};
-};
-*/
-
-//wikipediaSocket.close = function() {
- //   if (this.connection) {
-  //      this.connection.close();
-   // }
-//};
 
 var log_rc = function(rc_str, limit) {
     $('#rc-log').prepend('<li>' + rc_str + '</li>');
@@ -338,59 +211,7 @@ var return_lang_settings = function() {
     return enabled_langs;
 };
 
-var set_hash_settings = function (langs) {
-    if (langs[0] === '') {
-        langs.splice(0, 1);
-    }
-    window.location.hash = '#' + langs.join(',');
-};
 
-var enable = function(setting) {
-    var hash_settings = return_hash_settings();
-    if (setting && hash_settings.indexOf(setting) < 0) {
-        hash_settings.push(setting);
-    }
-    set_hash_settings(hash_settings);
-};
-
-var disable = function(setting) {
-    var hash_settings = return_hash_settings();
-    var setting_i = hash_settings.indexOf(setting);
-    if (setting_i >= 0) {
-        hash_settings.splice(setting_i, 1);
-    }
-    set_hash_settings(hash_settings);
-};
-
-window.onhashchange = function () {
-    var hash_settings = return_hash_settings();
-    for (var lang in SOCKETS) {
-        if (hash_settings.indexOf(lang) >= 0) {
-            if (!SOCKETS[lang].connection || SOCKETS[lang].connection.readyState == 3) {
-                SOCKETS[lang].connect();
-                $('#' + lang + '-enable').prop('checked', true);
-            }
-        } else {
-            if ($('#' + lang + '-enable').is(':checked')) {
-                $('#' + lang + '-enable').prop('checked', false);
-            }
-            if (SOCKETS[lang].connection) {
-                SOCKETS[lang].close();
-            }
-        }
-    }
-    if (hash_settings.indexOf('notitles') >= 0) {
-        s_titles = false;
-    } else {
-        s_titles = true;
-    }
-    if (hash_settings.indexOf('nowelcomes') >= 0) {
-        s_welcome = false;
-    } else {
-        s_welcome = true;
-    }
-    set_hash_settings(hash_settings);
-};
 
 var make_click_handler = function($box, setting) {
     return function() {
