@@ -1,11 +1,6 @@
 function wp_action(data, svg_area) {
     total_edits += 1;
-    // if (total_edits == 1) {
-    //     $('#edit_counter').html('You have seen <span>' + total_edits + ' possible planets detected</span>.');
-    // } else {
-    //     $('#edit_counter').html('You have seen a total of <span>' + insert_comma(total_edits) + ' total planets</span>.');
-    // }
-    var now = new Date();
+     var now = new Date();
     edit_times.push(now);
     to_save = [];
     
@@ -19,6 +14,7 @@ function wp_action(data, svg_area) {
         type = 'anon';
     } else if (data["Kepler Disposition"] ==  'CANDIDATE') {
         type = 'user';
+        newuser_action(data,svg_area);
     } else {
         type = 'bot';
     }
@@ -45,14 +41,11 @@ function wp_action(data, svg_area) {
 
     var circle_id = 'd' + ((Math.random() * 100000) | 0);
 
-
-
-
     var circle_group = svg_area.append('g')
         .attr('transform', 'translate(' + x + ', ' + y + ')')
         .attr('fill', edit_color);
 
-    var ring = circle_group.append('circle')
+ /*   var ring = circle_group.append('circle')
          .attr({r: size + 20,
                 stroke: 'none'})
          .transition()
@@ -61,12 +54,12 @@ function wp_action(data, svg_area) {
          .ease(Math.sqrt)
          .duration(2500)
          .remove();
-
-    var circle_container = circle_group.append('a')
+*/
+   var circle_container = circle_group.append('a')
         .attr('xlink:href', data["KOI Name"])
         .attr('target', '_blank')
         .attr('fill', svg_text_color);
-
+       
     var circle = circle_container.append('circle')
         .classed(type, true)
         .attr('r', size)
@@ -89,6 +82,7 @@ function wp_action(data, svg_area) {
                 .delay(1000)
                 .style('opacity', 0)
                 .duration(2000)
+
                 .each('end', function() { no_label = true; })
                 .remove();
         }
@@ -123,11 +117,11 @@ function play_sound(size, type, volume) {
     index = Math.max(1, index);
     if (current_notes < note_overlap) {
         current_notes++;
-        if (type == 'add') {
+        //if (type == 'add') {
             celesta[index].play();
-        } else {
-            clav[index].play();
-        }
+      //  } else {
+        //    clav[index].play();
+        //}
         setTimeout(function() {
             current_notes--;
         }, note_timeout);
@@ -139,13 +133,11 @@ function play_random_swell() {
     swells[index].play();
 }
 
-function newuser_action(data, lid, svg_area) {
+function newuser_action(data, svg_area) {
     play_random_swell();
-    var messages = ['Welcome ' + data["KOI Name"] + ', the known planets in the universe'];
-                    //'Wikipedia has a new user, ' + data.planet + '! Welcome!',
-                   // 'Welcome, ' + data.planet + ' has joined Wikipedia!'];
-    var message = Math.round(Math.random() * (messages.length - 1));
-    var user_link = 'http://' + lid + '.wikipedia.org/w/index.php?title=User_talk:' + data["KOI name"] + '&action=edit&section=new';
+    var messages = ['Welcome ' + data["KOI Name"] + ', candidate planet to our known universe'];
+      var message = Math.round(Math.random() * (messages.length - 1));
+    var user_link = 'http://cnn.com';
    var user_group = svg_area.append('g');
 
     var user_container = user_group.append('a')
@@ -154,7 +146,7 @@ function newuser_action(data, lid, svg_area) {
 
     user_group.transition()
         .delay(7000)
-        .remove();
+       .remove();
 
     user_container.transition()
         .delay(4000)
@@ -183,14 +175,3 @@ function newuser_action(data, lid, svg_area) {
         .attr('text-anchor', 'middle');
 
 }
-
-
-var make_click_handler = function($box, setting) {
-    return function() {
-            if ($box.is(':checked')) {
-                enable(setting);
-            } else {
-                disable(setting);
-            }
-        };
-};
