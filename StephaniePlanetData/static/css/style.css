@@ -27,6 +27,12 @@ label {
     margin-left: .5em;
 }
 
+.box {
+  margin: 30px;
+  height: 25px;
+  width: 25px;
+}
+
 #area {
     overflow: hidden;
 }
