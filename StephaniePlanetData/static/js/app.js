@@ -5,7 +5,7 @@ function wp_action(data, svg_area) {
     to_save = [];
     
 
-    var size = data["Planet Radius"]*50;
+    var size = data["Planet Radius"]*25;
     var label_text = data["KOI Name"];
     var csize = size;
     var no_label = false;
