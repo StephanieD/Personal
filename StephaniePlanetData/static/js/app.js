@@ -11,9 +11,9 @@ function wp_action(data, svg_area) {
     var no_label = false;
     var type;
     if (data["Kepler Disposition"]== 'NOT DISPOSITIONED') {
-        type = 'anon';
-    } else if (data["Kepler Disposition"] ==  'CANDIDATE') {
         type = 'user';
+    } else if (data["Kepler Disposition"] ==  'CANDIDATE') {
+        type = 'anon';
         newuser_action(data,svg_area);
     } else {
         type = 'bot';
@@ -105,6 +105,31 @@ function wp_action(data, svg_area) {
     }
 }
 
+function play_candidate_sound(){
+    // var max_pitch = 100.0;
+    // var log_used = 1.0715307808111486871978099;
+    // var pitch = 100 - Math.min(max_pitch, Math.log(size + log_used) / Math.log(log_used));
+    // var index = Math.floor(pitch / 100.0 * Object.keys(celesta).length);
+    // var fuzz = Math.floor(Math.random() * 4) - 2;
+    // index += fuzz;
+    // index = Math.min(Object.keys(celesta).length - 1, index);
+    // index = Math.max(1, index);
+    if (current_notes < note_overlap) {
+        current_notes++;
+        //if (type == 'add') {
+          //  celesta[0].play();
+          //  celesta[3].play();
+           // celessta[5].play();
+      //  } else {
+        //    clav[index].play();
+        //}
+        setTimeout(function() {
+            current_notes--;
+        }, note_timeout);
+    }
+
+
+}
 
 function play_sound(size, type, volume) {
     var max_pitch = 100.0;
@@ -134,7 +159,7 @@ function play_random_swell() {
 }
 
 function newuser_action(data, svg_area) {
-    play_random_swell();
+   play_candidate_sound();
     var messages = ['Welcome ' + data["KOI Name"] + ', candidate planet to our known universe'];
       var message = Math.round(Math.random() * (messages.length - 1));
     var user_link = 'http://cnn.com';
@@ -144,20 +169,20 @@ function newuser_action(data, svg_area) {
         .attr('xlink:href', user_link)
         .attr('target', '_blank');
 
-    user_group.transition()
-        .delay(7000)
-       .remove();
+    // user_group.transition()
+    //     .delay(7000)
+    //    .remove();
 
-    user_container.transition()
-        .delay(4000)
-        .style('opacity', 0)
-        .duration(3000);
+     user_container.transition()
+         .delay(1000)
+         .style('opacity', 0)
+         .duration(500);
 
     user_container.append('rect')
         .attr('opacity', 0)
         .transition()
         .delay(100)
-        .duration(3000)
+        .duration(500)
         .attr('opacity', 1)
         .attr('fill', newuser_box_color)
         .attr('width', width)
@@ -169,8 +194,8 @@ function newuser_action(data, svg_area) {
         .classed('newuser-label', true)
         .attr('transform', 'translate(' + y +', 25)')
         .transition()
-        .delay(1500)
-        .duration(1000)
+        .delay(100)
+        .duration(500)
         .text(messages[message])
         .attr('text-anchor', 'middle');
 

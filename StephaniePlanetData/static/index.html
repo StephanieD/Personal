@@ -63,12 +63,14 @@
 
     var body_background_color = '#fff',
         body_text_color = '#000',
-        svg_background_color = '#fff',
+        svg_background_color = '#171616', //slate
         svg_text_color = '#fff',
-        newuser_box_color = 'rgb(41, 128, 185)',
-        bot_color = 'rgb(104,213,104)', //blue
-        anon_color = 'rgb(255, 225, 31)', //green
-        edit_color = '#fff',
+        newuser_box_color = '#171616',
+
+        bot_color = '#578FB2', //blue
+        anon_color = 'rgb(104,213,104)', //green
+
+        edit_color = '#578FB2',
         sound_totals = 51,
         total_edits = 0;
 
@@ -123,7 +125,7 @@
 
         var svg = d3.select("#area").append("svg")
             .attr({width: width, height: height})
-            .style('background-color', '#1c2733');
+            .style('background-color', svg_background_color);
 
         var update_window = function() {
             width = w.innerWidth || e.clientWidth || g.clientWidth;
@@ -211,6 +213,7 @@ data = [{"Kepler ID":"757450","KOI Name":"K00889.01","Kepler Disposition":"CANDI
 </head>
 <body>
     <div id='header'>
+        <!--
      <span> <div  class='box' style='background-color:green;'> </div> <p class="legend"> Candidate </p> </span> 
          <span><div   class='box' style='background-color:yellow;'> </span>
          <span>
@@ -219,7 +222,8 @@ data = [{"Kepler ID":"757450","KOI Name":"K00889.01","Kepler Disposition":"CANDI
       //    <span id="volumeSlider" class="noUiSlider"></span>
        // </span></span>
    -->
-      <h1>Listen to the Discovery of Planets</h1>
+    <!--  <h1>Listen to the Discovery of Planets</h1>
+    <-->
     </div>
     <div id='area'></div>
     <div id='content'>
