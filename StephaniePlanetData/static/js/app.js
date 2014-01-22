@@ -5,7 +5,9 @@ function wp_action(data, svg_area) {
     to_save = [];
     
 
+
     var size = data["Planet Radius"]*25;
+    var referenceSize = 25; //25 is the scaling factor, and we are scaling by it so we just need the original
     var label_text = data["KOI Name"];
     var csize = size;
     var no_label = false;
@@ -45,16 +47,19 @@ function wp_action(data, svg_area) {
         .attr('transform', 'translate(' + x + ', ' + y + ')')
         .attr('fill', edit_color);
 
- /*   var ring = circle_group.append('circle')
-         .attr({r: size + 20,
-                stroke: 'none'})
+      var ring = circle_group.append('circle')
+        // .attr({r: size + 20,
+         //       stroke: 'none'})
+        .attr({r: referenceSize, stroke:'white', opacity:.4})
+
          .transition()
-         .attr('r', size + 40)
+         //.attr('r', ref + 40)
+
          .style('opacity', 0)
          .ease(Math.sqrt)
          .duration(2500)
          .remove();
-*/
+
    var circle_container = circle_group.append('a')
         .attr('xlink:href', data["KOI Name"])
         .attr('target', '_blank')
@@ -181,7 +186,7 @@ function newuser_action(data, svg_area) {
     user_container.append('rect')
         .attr('opacity', 0)
         .transition()
-        .delay(100)
+        .delay(250)
         .duration(500)
         .attr('opacity', 1)
         .attr('fill', newuser_box_color)
@@ -194,7 +199,7 @@ function newuser_action(data, svg_area) {
         .classed('newuser-label', true)
         .attr('transform', 'translate(' + y +', 25)')
         .transition()
-        .delay(100)
+        .delay(250)
         .duration(500)
         .text(messages[message])
         .attr('text-anchor', 'middle');
